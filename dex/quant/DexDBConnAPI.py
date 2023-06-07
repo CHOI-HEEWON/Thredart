@@ -335,7 +335,7 @@ class DexDBConnAPI():
 
     # 상한가 날짜 조회(중복 제외)
     def select_upper_limit_date(self):
-        query = "SELECT DISTINCT(upper_limit_date) FROM upper_limit_stock_list"
+        query = "SELECT DISTINCT(upper_limit_date) FROM upper_limit_stock_list order by upper_limit_date"
 
         self.cursor.execute(query)
         ret_data = self.cursor.fetchall()
