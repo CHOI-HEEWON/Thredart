@@ -1,0 +1,80 @@
+* {
+    font-family: sans-serif
+    /* background-color: black; */
+    /* color: white; */
+    /* border: black;
+    text-align: center;  */
+} 
+
+QLabel {
+    text-align: center;
+}
+
+self.dynamic_canvas {
+    background-color: black;
+} 
+
+QTableWidget {
+    border: 1px solid gray;  
+    background-color: white; 
+}
+
+QTableWidget::item {
+    color: black;  
+}
+
+/* self.top_widget {
+    background-color: gray;
+}
+
+QWidget::self.remaining_widget {
+    background-color: black;
+} */
+
+/* QHeaderView {
+    background-color: red;
+} */
+
+/* QCalendarWidget {
+    background-color: black;
+}
+QCalendarWidget QToolButton {
+    color: white;
+}
+QCalendarWidget QToolButton::pressed {
+    background-color: white;
+    color: black;
+}
+QCalendarWidget QTableView {
+    background-color: black;
+}
+QCalendarWidget QTableView::item {
+    color: white;
+}
+QCalendarWidget QTableView QWidget:enabled {
+    background-color: rgba(255, 255, 255, 20%);
+}
+QCalendarWidget QTableView QWidget:disabled {
+    background-color: rgba(255, 255, 255, 0%);
+}
+QCalendarWidget QTableCornerButton::section {
+    background-color: white;
+}
+QCalendarWidget QTableView QHeaderView::section {
+    background-color: black;
+    color: white;
+}
+QCalendarWidget QWidget#qt_calendar_navigationbar {
+    background-color: black;
+    color: white;
+}
+QCalendarWidget QSpinBox {
+    background-color: black;
+    color: white;
+} */
+
+/* QPushButton, QToolButton {
+    background-color: transparent;
+    border: none; 
+    padding: 0px;
+} */
