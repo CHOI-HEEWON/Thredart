@@ -55,26 +55,27 @@ class KiwoonMain():
             kiwoomMain.sendMsgToThredartBot("Error occurred in get_stock_list: " + e)      
 
     # Kospi, Kosdaq 전종목 조회
-    def get_kospi_kosdaq_stock_list(self):
-        try:
-            kr_stock_list = self.KiwoomAPI.get_kospi_kosdaq_stock_list()  # 선정된 종목 조회
+    # def get_kospi_kosdaq_stock_list(self):
+    #     try:
+    #         kr_stock_list = self.KiwoomAPI.get_kospi_kosdaq_stock_list()  # 선정된 종목 조회
 
-            return kr_stock_list 
+    #         return kr_stock_list 
         
-        except Exception as e:
-            kiwoomMain.sendMsgToThredartBot("Error occurred in get_stock_list: " + e)                      
+    #     except Exception as e:
+    #         kiwoomMain.sendMsgToThredartBot("Error occurred in get_stock_list: " + e)                      
     
     # 실시간 호가 및 체결 데이터 조회
-    def get_stock_data(self, stock_list):
+    def get_stock_data(self):
         try:
             kiwoomMain.sendMsgToThredartBot(kiwoomMain.today_date +" 실시간 호가 및 체결 데이터 수집 중") 
 
             self.KiwoomAPI.server.is_insert_stock_data_enabled = True
 
-            sScreenNo = "0001"
+            sScreenNo = ""
+            stock_list = ""
             sFidList = "10;15;30;41;61;71;81;51;62;72;82;52;63;73;83;53;64;74;84;54;65;75;85;55;66;76;86;56;67;77;87;57;68;78;88;58;69;79;89;59;70;80;90;200;201;291;292;293;294;295"
-            sRealType = "0"        
-            self.KiwoomAPI.insert_stock_data(sScreenNo, ";".join(stock_list), sFidList, sRealType)
+            sRealType = "1"        
+            self.KiwoomAPI.insert_stock_data(sScreenNo, stock_list, sFidList, sRealType)
         
         except Exception as e:
             kiwoomMain.sendMsgToThredartBot("Error occurred in get_stock_data: " + e)    
@@ -105,11 +106,10 @@ class KiwoonMain():
     def main(self):
         self.sendMsgToThredartBot(kiwoomMain.today_date +" Kiwoom 데이터 수집 시작")
         # code_list = kiwoomMain.get_stock_list()
-        stock_list = kiwoomMain.get_kospi_kosdaq_stock_list()
+        # stock_list = kiwoomMain.get_kospi_kosdaq_stock_list()
 
-        if stock_list:
-            kiwoomMain.get_stock_data(stock_list)
-
+        # if stock_list:
+        kiwoomMain.get_stock_data()
         kiwoomMain.get_data_cnt()
         kiwoomMain.stop_main()
        

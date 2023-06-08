@@ -303,7 +303,25 @@ class KiwoomAPI(Bot):
     def insert_stock_data(self, scr_no, stock_list, fid_list, opt_type):
         print('KiwoomAPI.insert_stock_data(self, scr_no, code_list, fid_list, opt_type) 호출')  
 
-        self.api.set_real_reg(scr_no, stock_list, fid_list, opt_type)
+        kr_stock_list = self.get_kospi_kosdaq_stock_list()
+        print("kr_stock_list : " + str(kr_stock_list))
+        print("len(kr_stock_list) : " + str(len(kr_stock_list)))  # 3682
+
+        # scr_no 초기값 설정
+        scr_no = '0001'
+
+        # kr_stock_list를 100개씩 끊어서 처리
+        for i in range(0, len(kr_stock_list), 100):
+            stock_list_chunk = kr_stock_list[i:i+100]
+            stock_list = ";".join(stock_list_chunk)
+
+            print("stock_list : " + stock_list)
+            print("scr_no : " + scr_no)
+            
+            self.api.set_real_reg(scr_no, stock_list, fid_list, opt_type)
+            
+            # scr_no 증가
+            scr_no = str(int(scr_no) + 1).zfill(4)          
 
         self.api.loop()
 
@@ -350,7 +368,7 @@ class KiwoomAPI(Bot):
 
         print('KiwoomAPI.get_kospi_kosdaq_stock_list() 종료')     
 
-        return kr_stock_list 
+        return kr_stock_list
 
 # ============================================== #
 # 서버에서 데이터를 받아 처리하는 클래스
@@ -592,6 +610,8 @@ class MyServer(Server):
     def insert_stock_data(self, code, real_type, real_data):
         # print('\tServer.insert_stock_data(self, code, real_type, real_data) 호출')
         # print('\t\t', self.is_insert_stock_data_enabled)
+
+        print("code :::::::::::::: " + code)
 
         # 오전 11시시 프로그램 종료
         if datetime.now().strftime("%H:%M:%S") == END_TIME:
