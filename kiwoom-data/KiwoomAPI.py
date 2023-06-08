@@ -300,14 +300,10 @@ class KiwoomAPI(Bot):
         return ret_data    
 
     # 실시간 데이터 조회
-    def insert_stock_data(self, scr_no, code_list, fid_list, opt_type):
+    def insert_stock_data(self, scr_no, stock_list, fid_list, opt_type):
         print('KiwoomAPI.insert_stock_data(self, scr_no, code_list, fid_list, opt_type) 호출')  
 
-        # 오전 11시시 프로그램 종료
-        if datetime.now().strftime("%H:%M:%S") == END_TIME:
-            self.api.unloop()
-
-        self.api.set_real_reg(scr_no, code_list, fid_list, opt_type)
+        self.api.set_real_reg(scr_no, stock_list, fid_list, opt_type)
 
         self.api.loop()
 
@@ -596,6 +592,10 @@ class MyServer(Server):
     def insert_stock_data(self, code, real_type, real_data):
         # print('\tServer.insert_stock_data(self, code, real_type, real_data) 호출')
         # print('\t\t', self.is_insert_stock_data_enabled)
+
+        # 오전 11시시 프로그램 종료
+        if datetime.now().strftime("%H:%M:%S") == END_TIME:
+            self.api.unloop()        
 
         if not self.is_insert_stock_data_enabled:
             return
