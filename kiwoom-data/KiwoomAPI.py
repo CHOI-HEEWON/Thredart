@@ -299,7 +299,7 @@ class KiwoomAPI(Bot):
 
         return ret_data    
 
-    # 실시간 데이터 조회
+    # 실시간 호가 및 체결 데이터 조회
     def insert_stock_data(self, scr_no, stock_list, fid_list, opt_type):
         print('KiwoomAPI.insert_stock_data(self, scr_no, code_list, fid_list, opt_type) 호출')  
 
