@@ -303,6 +303,10 @@ class KiwoomAPI(Bot):
     def insert_stock_data(self, scr_no, code_list, fid_list, opt_type):
         print('KiwoomAPI.insert_stock_data(self, scr_no, code_list, fid_list, opt_type) 호출')  
 
+        # 오전 11시시 프로그램 종료
+        if datetime.now().strftime("%H:%M:%S") == END_TIME:
+            self.api.unloop()
+
         self.api.set_real_reg(scr_no, code_list, fid_list, opt_type)
 
         self.api.loop()
@@ -372,7 +376,7 @@ class MyServer(Server):
         # self.share = Share()
 
         # DB 연결
-        self.dBConnAPI = DBConnAPI.DBConnAPI()    
+        self.dBConnAPI = DBConnAPI()    
 
         # 변수 초기화
         self.downloading = False
@@ -634,9 +638,5 @@ class MyServer(Server):
             ret_df = pd.DataFrame.from_dict(data)
             for i, row in ret_df.iterrows():
                 self.dBConnAPI.insert_stock_hoga(row)
-
-        # 오전 11시시 프로그램 종료
-        if datetime.now().strftime("%H:%M:%S") == END_TIME:
-            self.api.unloop()
 
         # print('\tServer.insert_stock_data(self, code, real_type, real_data) 종료')
