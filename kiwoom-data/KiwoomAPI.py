@@ -289,13 +289,13 @@ class KiwoomAPI(Bot):
 
         print('KiwoomAPI.opt10001(rq_name, tr_code, prev_next, scr_no) 종료')    
 
-    # 종목 선정 조회
-    def select_stock_list(self):
-        print('KiwoomAPI.select_stock_list() 호출') 
+    # 거래대금상위 종목 조회(시총10억이상, 8000억이하, 등락율 0.00이상)
+    def select_top_volume_stock_list(self):
+        print('KiwoomAPI.select_top_volume_stock_list() 호출') 
 
-        ret_data = self.dBConnAPI.select_stock_list()
+        ret_data = self.dBConnAPI.select_top_volume_stock_list()
 
-        print('KiwoomAPI.select_stock_list() 종료')         
+        print('KiwoomAPI.select_top_volume_stock_list() 종료')         
 
         return ret_data    
 
@@ -304,8 +304,8 @@ class KiwoomAPI(Bot):
         print('KiwoomAPI.insert_stock_data(self, scr_no, code_list, fid_list, opt_type) 호출')  
 
         kr_stock_list = self.get_kospi_kosdaq_stock_list()
-        print("kr_stock_list : " + str(kr_stock_list))
-        print("len(kr_stock_list) : " + str(len(kr_stock_list)))  # 3682
+        # print("kr_stock_list : " + str(kr_stock_list))
+        # print("len(kr_stock_list) : " + str(len(kr_stock_list)))  # 3682
 
         # scr_no 초기값 설정
         scr_no = '0001'
@@ -315,8 +315,8 @@ class KiwoomAPI(Bot):
             stock_list_chunk = kr_stock_list[i:i+100]
             stock_list = ";".join(stock_list_chunk)
 
-            print("stock_list : " + stock_list)
-            print("scr_no : " + scr_no)
+            # print("stock_list : " + stock_list)
+            # print("scr_no : " + scr_no)
             
             self.api.set_real_reg(scr_no, stock_list, fid_list, opt_type)
             
@@ -594,7 +594,7 @@ class MyServer(Server):
                 self.ret_stock_df = pd.DataFrame.from_dict(self.ret_data_dict, orient='index').T
                 for i, row in self.ret_stock_df.iterrows():
                     # print("i, row : ", i, row)
-                    self.dBConnAPI.insert_stock_list(row)
+                    self.dBConnAPI.insert_top_volume_stock_list(row)
 
         # data의 key 값이 있을 때 실행할 코드
         if self.checking:

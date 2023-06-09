@@ -34,8 +34,8 @@ class KiwoonMain():
 
 
 # ========== #    
-    # 종목 선정(거래대금상위 중 시총10억이상, 8000억이하, 등락율 0.00이상 조회)
-    def get_stock_list(self):
+    # 거래대금상위 종목 조회(시총10억이상, 8000억이하, 등락율 0.00이상)
+    def get_top_volume_stock_list(self):
         # threading.Timer(60*5, kiwoomMain.SelectionStockEvent).start() # 5분에 한번씩 호출
         try:
             ret_data = kiwoomMain.opt10032()
@@ -43,7 +43,7 @@ class KiwoonMain():
 
             kiwoomMain.opt10001(code_list)
 
-            code_list, ticker_nm = self.KiwoomAPI.select_stock_list()  # 선정된 종목 조회
+            code_list, ticker_nm = self.KiwoomAPI.select_top_volume_stock_list() 
             code_list_cnt = len(code_list)
             code_data = "\n".join([code + " " + name for code, name in zip(code_list, ticker_nm)])
 
@@ -52,9 +52,9 @@ class KiwoonMain():
             return code_list 
         
         except Exception as e:
-            kiwoomMain.sendMsgToThredartBot("Error occurred in get_stock_list: " + e)      
+            kiwoomMain.sendMsgToThredartBot("Error occurred in get_top_volume_stock_list: " + e)      
     
-    # 실시간 호가 및 체결 데이터 조회
+    # Kospi, Kosdaq 전종목 실시간 호가 및 체결 데이터 조회
     def get_stock_data(self):
         try:
             kiwoomMain.sendMsgToThredartBot(kiwoomMain.today_date +" 실시간 호가 및 체결 데이터 수집 중") 
@@ -95,10 +95,6 @@ class KiwoonMain():
 # ========== #          
     def main(self):
         self.sendMsgToThredartBot(kiwoomMain.today_date +" Kiwoom 데이터 수집 시작")
-        # code_list = kiwoomMain.get_stock_list()
-        # stock_list = kiwoomMain.get_kospi_kosdaq_stock_list()
-
-        # if stock_list:
         kiwoomMain.get_stock_data()
         kiwoomMain.get_data_cnt()
         kiwoomMain.stop_main()

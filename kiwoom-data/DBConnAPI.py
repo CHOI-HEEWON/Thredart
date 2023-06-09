@@ -18,15 +18,15 @@ class DBConnAPI():
     cursor = conn.cursor()
 
     # 종목 선정 SELECT
-    def select_stock_list(self):
-        query = "SELECT ticker, ticker_nm FROM stock_list WHERE created_at = CURDATE()"
+    def select_top_volume_stock_list(self):
+        query = "SELECT ticker, ticker_nm FROM top_volume_stock_list WHERE created_at = CURDATE()"
 
         self.cursor.execute(query)
         ret_data = self.cursor.fetchall()
         code_list = [item[0] for item in ret_data]
         ticker_nm = [item[1] for item in ret_data]
 
-        print("select_stock_list: ", self.cursor.rowcount, "record selected")
+        print("select_top_volume_stock_list: ", self.cursor.rowcount, "record selected")
         
         return code_list, ticker_nm        
     
@@ -55,8 +55,8 @@ class DBConnAPI():
         return ret_data       
 
     # 종목 선정 INSERT
-    def insert_stock_list(self, row):
-        query = "INSERT INTO stock_list \
+    def insert_top_volume_stock_list(self, row):
+        query = "INSERT INTO top_volume_stock_list \
                 (`created_at`, \
                  `ticker`, \
                  `ticker_nm`, \
@@ -86,7 +86,7 @@ class DBConnAPI():
         self.cursor.execute(query, val)
         self.conn.commit()        
 
-        print("insert_stock_list: ", self.cursor.rowcount, "record inserted")
+        print("insert_top_volume_stock_list: ", self.cursor.rowcount, "record inserted")
 
     # 호가 데이터 INSERT
     def insert_stock_hoga(self, row):
