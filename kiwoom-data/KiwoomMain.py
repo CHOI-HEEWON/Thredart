@@ -53,16 +53,6 @@ class KiwoonMain():
         
         except Exception as e:
             kiwoomMain.sendMsgToThredartBot("Error occurred in get_stock_list: " + e)      
-
-    # Kospi, Kosdaq 전종목 조회
-    # def get_kospi_kosdaq_stock_list(self):
-    #     try:
-    #         kr_stock_list = self.KiwoomAPI.get_kospi_kosdaq_stock_list()  # 선정된 종목 조회
-
-    #         return kr_stock_list 
-        
-    #     except Exception as e:
-    #         kiwoomMain.sendMsgToThredartBot("Error occurred in get_stock_list: " + e)                      
     
     # 실시간 호가 및 체결 데이터 조회
     def get_stock_data(self):

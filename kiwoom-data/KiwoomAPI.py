@@ -611,8 +611,6 @@ class MyServer(Server):
         # print('\tServer.insert_stock_data(self, code, real_type, real_data) 호출')
         # print('\t\t', self.is_insert_stock_data_enabled)
 
-        print("code :::::::::::::: " + code)
-
         # 오전 11시시 프로그램 종료
         if datetime.now().strftime("%H:%M:%S") == END_TIME:
             self.api.unloop()        
