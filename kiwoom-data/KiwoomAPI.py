@@ -299,6 +299,30 @@ class KiwoomAPI(Bot):
 
         return ret_data    
 
+    # Kospi, Kosdaq 전종목 조회
+    def get_kospi_kosdaq_stock_list(self):
+        print('KiwoomAPI.get_kospi_kosdaq_stock_list() 호출') 
+
+        kr_stock_list = []
+
+        kospi_list = self.api.get_code_list_by_market("0")
+        kospi_stock_list = kospi_list.split(";")[:-1]
+
+        # print("kospi_stock_list : " + str(kospi_stock_list))
+
+        kosdaq_list = self.api.get_code_list_by_market("10")
+        kosdaq_stock_list = kosdaq_list.split(";")[:-1]
+
+        # print("kosdaq_stock_list : " + str(kosdaq_stock_list))
+
+        kr_stock_list = kospi_stock_list + kosdaq_stock_list
+
+        # print("kr_stock_list : " + str(kr_stock_list))
+
+        print('KiwoomAPI.get_kospi_kosdaq_stock_list() 종료')     
+
+        return kr_stock_list
+    
     # 실시간 호가 및 체결 데이터 조회
     def insert_stock_data(self, scr_no, stock_list, fid_list, opt_type):
         print('KiwoomAPI.insert_stock_data(self, scr_no, code_list, fid_list, opt_type) 호출')  
@@ -347,28 +371,6 @@ class KiwoomAPI(Bot):
 
         return ret_data       
 
-    def get_kospi_kosdaq_stock_list(self):
-        print('KiwoomAPI.get_kospi_kosdaq_stock_list() 호출') 
-
-        kr_stock_list = []
-
-        kospi_list = self.api.get_code_list_by_market("0")
-        kospi_stock_list = kospi_list.split(";")[:-1]
-
-        # print("kospi_stock_list : " + str(kospi_stock_list))
-
-        kosdaq_list = self.api.get_code_list_by_market("10")
-        kosdaq_stock_list = kosdaq_list.split(";")[:-1]
-
-        # print("kosdaq_stock_list : " + str(kosdaq_stock_list))
-
-        kr_stock_list = kospi_stock_list + kosdaq_stock_list
-
-        # print("kr_stock_list : " + str(kr_stock_list))
-
-        print('KiwoomAPI.get_kospi_kosdaq_stock_list() 종료')     
-
-        return kr_stock_list
 
 # ============================================== #
 # 서버에서 데이터를 받아 처리하는 클래스
