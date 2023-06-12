@@ -17,9 +17,9 @@ class DexDBConnAPI():
     cursor = conn.cursor()
 
     #  상한가 INSERT
-    def insert_upper_limit_stock_list(self, row):
-        query = "INSERT INTO upper_limit_stock_list \
-                (`upper_limit_date`, \
+    def insert_hex_stock_list(self, row):
+        query = "INSERT INTO hex_stock_list \
+                (`hex_date`, \
                  `ticker`, \
                  `ticker_nm`, \
                  `d_3_opening_price`, \
@@ -205,11 +205,11 @@ class DexDBConnAPI():
         self.cursor.execute(query, val)
         self.conn.commit()        
 
-        print("insert_upper_limit_stock_list: ", self.cursor.rowcount, "record inserted")
+        print("insert_hex_stock_list: ", self.cursor.rowcount, "record inserted")
 
     # 상한가 UPDATE
-    def update_upper_limit_stock_list(self, row):
-        query = "UPDATE upper_limit_stock_list \
+    def update_hex_stock_list(self, row):
+        query = "UPDATE hex_stock_list \
                 SET \
                 `d_3_opening_price` = %s, \
                 `d_2_opening_price` = %s, \
@@ -267,7 +267,7 @@ class DexDBConnAPI():
                 `d6_v` = %s, \
                 `d7_v` = %s \
                 WHERE \
-                `upper_limit_date` = %s AND `ticker` = %s"  
+                `hex_date` = %s AND `ticker` = %s"  
 
         val =  (row['시가_D-3'],
                 row['시가_D-2'],
@@ -331,24 +331,24 @@ class DexDBConnAPI():
         self.cursor.execute(query, val)
         self.conn.commit()        
 
-        print("update_upper_limit_stock_list: ", self.cursor.rowcount, "record updated")       
+        print("update_hex_stock_list: ", self.cursor.rowcount, "record updated")       
 
     # 상한가 날짜 조회(중복 제외)
-    def select_upper_limit_date(self):
-        query = "SELECT DISTINCT(upper_limit_date) FROM upper_limit_stock_list order by upper_limit_date"
+    def select_hex_date(self):
+        query = "SELECT DISTINCT(hex_date) FROM hex_stock_list order by hex_date"
 
         self.cursor.execute(query)
         ret_data = self.cursor.fetchall()
 
-        upper_limit_date = [item[0] for item in ret_data]
+        hex_date = [item[0] for item in ret_data]
 
-        print("select_upper_limit_date: ", self.cursor.rowcount, "record selected")
+        print("select_hex_date: ", self.cursor.rowcount, "record selected")
         
-        return upper_limit_date                       
+        return hex_date                       
 
     # 상한가 `ticker, d_2_v, d_1_v, d0_v, d0_high_price` SELECT
     def select_dex_ticker(self):    
-        query = "SELECT ticker, d_2_v, d_1_v, d0_v, d0_high_price FROM upper_limit_stock_list WHERE upper_limit_date = (SELECT MAX(upper_limit_date) FROM upper_limit_stock_list)"
+        query = "SELECT ticker, d_2_v, d_1_v, d0_v, d0_high_price FROM hex_stock_list WHERE hex_date = (SELECT MAX(hex_date) FROM hex_stock_list)"
 
         self.cursor.execute(query)
         ret_data = self.cursor.fetchall()
@@ -365,26 +365,26 @@ class DexDBConnAPI():
     
     # 상한가 주문상태(1:매수) SELECT
     def select_dex_ticker_order_status_1(self):    
-        query = "SELECT upper_limit_date, ticker FROM upper_limit_stock_list WHERE order_status = '1'"
+        query = "SELECT hex_date, ticker FROM hex_stock_list WHERE order_status = '1'"
 
         self.cursor.execute(query)
         ret_data = self.cursor.fetchall()
 
-        upper_limit_date = [item[0] for item in ret_data]
+        hex_date = [item[0] for item in ret_data]
         ticker_list = [item[1] for item in ret_data]
 
         print("select_dex_ticker_order_status_1: ", self.cursor.rowcount, "record selected")
         
-        return upper_limit_date, ticker_list
+        return hex_date, ticker_list
     
     # 상한가 주문상태(1:매수)을 주문상태(2:매도)로 UPDATE
     def update_dex_ticker_order_status_2(self, row):    
 
-        query = "UPDATE upper_limit_stock_list \
+        query = "UPDATE hex_stock_list \
                 SET \
                 `order_status` = '2' \
                 WHERE \
-                `upper_limit_date` = %s AND `ticker` = %s"    
+                `hex_date` = %s AND `ticker` = %s"    
 
         val =  (row['날짜'],
                 row['종목코드']                

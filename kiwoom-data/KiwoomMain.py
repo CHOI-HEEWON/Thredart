@@ -59,7 +59,7 @@ class KiwoonMain():
         try:
             kiwoomMain.sendMsgToThredartBot(kiwoomMain.today_date +" 실시간 호가 및 체결 데이터 수집 중") 
 
-            self.KiwoomAPI.server.is_insert_stock_data_enabled = True
+            # self.KiwoomAPI.server.is_insert_stock_data_enabled = True
 
             sScreenNo = ""
             stock_list = ""
@@ -108,6 +108,6 @@ class KiwoonMain():
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     kiwoomMain = KiwoonMain()
-    kiwoomMain.schedule_job()
-    # kiwoomMain.main()
+    # kiwoomMain.schedule_job()
+    kiwoomMain.main()
  

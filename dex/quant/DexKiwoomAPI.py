@@ -217,12 +217,12 @@ class DexKiwoomAPI(Bot):
     def dex_sell(self):    
         print('DexKiwoomAPI.dex_sell(self) 호출')
 
-        upper_limit_date, ticker_list = self.dexDBConnAPI.select_dex_ticker_order_status_1()
+        hex_date, ticker_list = self.dexDBConnAPI.select_dex_ticker_order_status_1()
 
         if len(ticker_list) > 0:
-            for upper_limit_date, ticker in zip(upper_limit_date, ticker_list):
+            for hex_date, ticker in zip(hex_date, ticker_list):
                 print("\tticker : " + str(ticker))
-                print("\tupper_limit_date : " + str(upper_limit_date))
+                print("\thex_date : " + str(hex_date))
 
                 self.opt10006(ticker)
                 price = self.server.ret_data['opt10006']['Data']['종가']
@@ -235,7 +235,7 @@ class DexKiwoomAPI(Bot):
 
                 self.trade_sell(ticker, qty, price)  # 매도
 
-                row = {'날짜': upper_limit_date, '종목코드': ticker}
+                row = {'날짜': hex_date, '종목코드': ticker}
                 self.dexDBConnAPI.update_dex_ticker_order_status_2(row)
 
         print('DexKiwoomAPI.dex_sell(self) 종료')

@@ -325,31 +325,35 @@ class KiwoomAPI(Bot):
     
     # 실시간 호가 및 체결 데이터 조회
     def insert_stock_data(self, scr_no, stock_list, fid_list, opt_type):
-        print('KiwoomAPI.insert_stock_data(self, scr_no, code_list, fid_list, opt_type) 호출')  
+        try:
+            print('KiwoomAPI.insert_stock_data(self, scr_no, code_list, fid_list, opt_type) 호출')  
 
-        kr_stock_list = self.get_kospi_kosdaq_stock_list()
-        # print("kr_stock_list : " + str(kr_stock_list))
-        # print("len(kr_stock_list) : " + str(len(kr_stock_list)))  # 3682
+            kr_stock_list = self.get_kospi_kosdaq_stock_list()
+            # print("kr_stock_list : " + str(kr_stock_list))
+            # print("len(kr_stock_list) : " + str(len(kr_stock_list)))  # 3682
 
-        # scr_no 초기값 설정
-        scr_no = '0001'
+            # scr_no 초기값 설정
+            scr_no = '0001'
 
-        # kr_stock_list를 100개씩 끊어서 처리
-        for i in range(0, len(kr_stock_list), 100):
-            stock_list_chunk = kr_stock_list[i:i+100]
-            stock_list = ";".join(stock_list_chunk)
+            # kr_stock_list를 100개씩 끊어서 처리
+            for i in range(0, len(kr_stock_list), 100):
+                stock_list_chunk = kr_stock_list[i:i+100]
+                stock_list = ";".join(stock_list_chunk)
 
-            # print("stock_list : " + stock_list)
-            # print("scr_no : " + scr_no)
-            
-            self.api.set_real_reg(scr_no, stock_list, fid_list, opt_type)
-            
-            # scr_no 증가
-            scr_no = str(int(scr_no) + 1).zfill(4)          
+                # print("stock_list : " + stock_list)
+                # print("scr_no : " + scr_no)
+                
+                self.api.set_real_reg(scr_no, stock_list, fid_list, opt_type)
+                
+                # scr_no 증가
+                scr_no = str(int(scr_no) + 1).zfill(4)          
 
-        self.api.loop()
+            self.api.loop()
 
-        print('KiwoomAPI.insert_stock_data(self, scr_no, code_list, fid_list, opt_type) 종료')  
+            print('KiwoomAPI.insert_stock_data(self, scr_no, code_list, fid_list, opt_type) 종료')  
+
+        except Exception as e:
+            print("Error occurred in KiwoomAPI.insert_stock_data: " + e)           
 
     # 호가 데이터 개수 조회
     def select_stock_hoga_cnt(self):
@@ -610,53 +614,57 @@ class MyServer(Server):
 
     # 실시간 호가 및 체결 데이터 조회
     def insert_stock_data(self, code, real_type, real_data):
-        # print('\tServer.insert_stock_data(self, code, real_type, real_data) 호출')
-        # print('\t\t', self.is_insert_stock_data_enabled)
+        try:
+            # print('\tServer.insert_stock_data(self, code, real_type, real_data) 호출')
+            # print('\t\t', self.is_insert_stock_data_enabled)
 
-        # 오전 11시시 프로그램 종료
-        if datetime.now().strftime("%H:%M:%S") == END_TIME:
-            self.api.unloop()        
+            # 오전 11시시 프로그램 종료
+            if datetime.now().strftime("%H:%M:%S") == END_TIME:
+                self.api.unloop()        
 
-        if not self.is_insert_stock_data_enabled:
-            return
+            # if not self.is_insert_stock_data_enabled:
+            #     return
 
-        real_data_list = real_data.split()
-        del real_data_list[0]  # current_time(HHMMSS) 삭제
-        real_data_list.insert(0, code)  # code(종목코드) 추가        
+            real_data_list = real_data.split()
+            del real_data_list[0]  # current_time(HHMMSS) 삭제
+            real_data_list.insert(0, code)  # code(종목코드) 추가        
 
-        if real_type == "주식체결":
-            keys = stock_chegyeol_list['stock_chegyeol']
-            data = {key: list() for key in keys}
+            if real_type == "주식체결":
+                keys = stock_chegyeol_list['stock_chegyeol']
+                data = {key: list() for key in keys}
 
-            ret_data_list = []  #  real_data_list의 종목코드, 체결가, 체결량만 담을 리스트 선언
-            ret_data_list.append(code)  # 종목코드
-            ret_data_list.append(real_data_list[1])  # 체결가
-            ret_data_list.append(real_data_list[6])  # 체결량
+                ret_data_list = []  #  real_data_list의 종목코드, 체결가, 체결량만 담을 리스트 선언
+                ret_data_list.append(code)  # 종목코드
+                ret_data_list.append(real_data_list[1])  # 체결가
+                ret_data_list.append(real_data_list[6])  # 체결량
 
-            i = 0
-            for key in keys:
-                val = ret_data_list[i]  
-                data[key].append(val)
-                i = i + 1
+                i = 0
+                for key in keys:
+                    val = ret_data_list[i]  
+                    data[key].append(val)
+                    i = i + 1
 
-            # DB 저장
-            ret_df = pd.DataFrame.from_dict(data)
-            for i, row in ret_df.iterrows():
-                self.dBConnAPI.insert_stock_chegyeol(row)            
+                # DB 저장
+                ret_df = pd.DataFrame.from_dict(data)
+                for i, row in ret_df.iterrows():
+                    self.dBConnAPI.insert_stock_chegyeol(row)            
 
-        elif real_type == "주식호가잔량":
-            keys = stock_hoga_list['stock_hoga']
-            data = {key: list() for key in keys}
+            elif real_type == "주식호가잔량":
+                keys = stock_hoga_list['stock_hoga']
+                data = {key: list() for key in keys}
 
-            i = 0
-            for key in keys:
-                val = real_data_list[i]
-                data[key].append(val)
-                i = i + 1
+                i = 0
+                for key in keys:
+                    val = real_data_list[i]
+                    data[key].append(val)
+                    i = i + 1
 
-            # DB 저장
-            ret_df = pd.DataFrame.from_dict(data)
-            for i, row in ret_df.iterrows():
-                self.dBConnAPI.insert_stock_hoga(row)
+                # DB 저장
+                ret_df = pd.DataFrame.from_dict(data)
+                for i, row in ret_df.iterrows():
+                    self.dBConnAPI.insert_stock_hoga(row)
 
-        # print('\tServer.insert_stock_data(self, code, real_type, real_data) 종료')
+            # print('\tServer.insert_stock_data(self, code, real_type, real_data) 종료')
+
+        except Exception as e:
+            print("Error occurred in Server.insert_stock_data: " + e)                

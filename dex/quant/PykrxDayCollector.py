@@ -25,7 +25,7 @@ tickers_kosdaq = stock.get_market_ticker_list(market="KOSDAQ")
 tickers = tickers_kospi + tickers_kosdaq  
 
 # 상한가 날짜 조회
-upper_limit_date = dexDBConnAPI.select_upper_limit_date()
+hex_date = dexDBConnAPI.select_hex_date()
 
 for ticker in tickers:
     if "K" not in ticker and "L" not in ticker:
@@ -63,10 +63,10 @@ for ticker in tickers:
                             row[f'종가_D{i}'] = None
                             row[f'거래대금_D{i}'] = None
 
-                     if target_date.date() in upper_limit_date:
-                        dexDBConnAPI.update_upper_limit_stock_list(row)     
+                     if target_date.date() in hex_date:
+                        dexDBConnAPI.update_hex_limit_stock_list(row)     
                      else:    
-                        dexDBConnAPI.insert_upper_limit_stock_list(row)
+                        dexDBConnAPI.insert_hex_limit_stock_list(row)
                           
 
 print("Data collection and sorting completed.")
