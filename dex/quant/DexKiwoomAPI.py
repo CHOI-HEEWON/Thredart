@@ -213,11 +213,11 @@ class DexKiwoomAPI(Bot):
 
         print('DexKiwoomAPI.opt10080(rq_name, tr_code, prev_next, scr_no) 종료')
 
-    # dex 매도
-    def dex_sell(self):    
-        print('DexKiwoomAPI.dex_sell(self) 호출')
+    # hex 매도
+    def hex_sell(self):    
+        print('DexKiwoomAPI.hex_sell(self) 호출')
 
-        hex_date, ticker_list = self.dexDBConnAPI.select_dex_ticker_order_status_1()
+        hex_date, ticker_list = self.dexDBConnAPI.select_hex_ticker_order_status_1()
 
         if len(ticker_list) > 0:
             for hex_date, ticker in zip(hex_date, ticker_list):
@@ -236,9 +236,9 @@ class DexKiwoomAPI(Bot):
                 self.trade_sell(ticker, qty, price)  # 매도
 
                 row = {'날짜': hex_date, '종목코드': ticker}
-                self.dexDBConnAPI.update_dex_ticker_order_status_2(row)
+                self.dexDBConnAPI.update_hex_ticker_order_status_2(row)
 
-        print('DexKiwoomAPI.dex_sell(self) 종료')
+        print('DexKiwoomAPI.hex_sell(self) 종료')
 
     def trade_sell(self, ticker, qty, price):
         print('DexKiwoomAPI.trade_sell(self, ticker, qty, price) 호출')
@@ -269,23 +269,23 @@ class DexKiwoomAPI(Bot):
         
         print('DexKiwoomAPI.trade_sell(self, ticker, qty, price) 종료')
 
-    # dex 매수
-    def dex_buy(self):      
-        print('DexKiwoomAPI.dex_buy(self) 호출')
+    # hex 매수
+    def hex_buy(self):      
+        print('DexKiwoomAPI.hex_buy(self) 호출')
 
         score = 0
         ticker_list = []
         
-        ticker, d_2_v, d_1_v, d0_v, d0_high_price = self.dexDBConnAPI.select_dex_ticker()
+        ticker, d_2_v, d_1_v, d0_v, d0_high_price = self.dexDBConnAPI.select_hex_ticker()
 
         for ticker, d_2_v, d_1_v, d0_v, d0_high_price in zip(ticker, d_2_v, d_1_v, d0_v, d0_high_price):
             print("ticker: " + ticker)
 
             self.opt10006(ticker)
-            closing_price = self.server.ret_data['opt10006']['Data']['종가']
+            close_price = self.server.ret_data['opt10006']['Data']['종가']
             low_price = self.server.ret_data['opt10006']['Data']['저가']
 
-            print("closing_price: " + str(closing_price))
+            print("close_price: " + str(close_price))
             print("low_price: " + str(low_price))
 
             # FACTOR. A
@@ -310,7 +310,7 @@ class DexKiwoomAPI(Bot):
         # for ticker in ticker_list:
         #     self.trade_buy(ticker, qty, buy_price)  # 매수   
 
-        print('DexKiwoomAPI.dex_buy(self) 종료')
+        print('DexKiwoomAPI.hex_buy(self) 종료')
 
     def trade_buy(self, ticker, qty, price):
         print('DexKiwoomAPI.trade_buy(self, ticker, qty, price) 호출')

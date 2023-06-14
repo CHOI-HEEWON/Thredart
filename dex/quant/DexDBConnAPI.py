@@ -22,17 +22,17 @@ class DexDBConnAPI():
                 (`hex_date`, \
                  `ticker`, \
                  `ticker_nm`, \
-                 `d_3_opening_price`, \
-                 `d_2_opening_price`, \
-                 `d_1_opening_price`, \
-                 `d0_opening_price`, \
-                 `d1_opening_price`, \
-                 `d2_opening_price`, \
-                 `d3_opening_price`, \
-                 `d4_opening_price`, \
-                 `d5_opening_price`, \
-                 `d6_opening_price`, \
-                 `d7_opening_price`, \
+                 `d_3_open_price`, \
+                 `d_2_open_price`, \
+                 `d_1_open_price`, \
+                 `d0_open_price`, \
+                 `d1_open_price`, \
+                 `d2_open_price`, \
+                 `d3_open_price`, \
+                 `d4_open_price`, \
+                 `d5_open_price`, \
+                 `d6_open_price`, \
+                 `d7_open_price`, \
                  `d_3_high_price`, \
                  `d_2_high_price`, \
                  `d_1_high_price`, \
@@ -55,17 +55,17 @@ class DexDBConnAPI():
                  `d5_low_price`, \
                  `d6_low_price`, \
                  `d7_low_price`, \
-                 `d_3_closing_price`, \
-                 `d_2_closing_price`, \
-                 `d_1_closing_price`, \
-                 `d0_closing_price`, \
-                 `d1_closing_price`, \
-                 `d2_closing_price`, \
-                 `d3_closing_price`, \
-                 `d4_closing_price`, \
-                 `d5_closing_price`, \
-                 `d6_closing_price`, \
-                 `d7_closing_price`, \
+                 `d_3_close_price`, \
+                 `d_2_close_price`, \
+                 `d_1_close_price`, \
+                 `d0_close_price`, \
+                 `d1_close_price`, \
+                 `d2_close_price`, \
+                 `d3_close_price`, \
+                 `d4_close_price`, \
+                 `d5_close_price`, \
+                 `d6_close_price`, \
+                 `d7_close_price`, \
                  `d_3_v`, \
                  `d_2_v`, \
                  `d_1_v`, \
@@ -211,17 +211,17 @@ class DexDBConnAPI():
     def update_hex_stock_list(self, row):
         query = "UPDATE hex_stock_list \
                 SET \
-                `d_3_opening_price` = %s, \
-                `d_2_opening_price` = %s, \
-                `d_1_opening_price` = %s, \
-                `d0_opening_price` = %s, \
-                `d1_opening_price` = %s, \
-                `d2_opening_price` = %s, \
-                `d3_opening_price` = %s, \
-                `d4_opening_price` = %s, \
-                `d5_opening_price` = %s, \
-                `d6_opening_price` = %s, \
-                `d7_opening_price` = %s, \
+                `d_3_open_price` = %s, \
+                `d_2_open_price` = %s, \
+                `d_1_open_price` = %s, \
+                `d0_open_price` = %s, \
+                `d1_open_price` = %s, \
+                `d2_open_price` = %s, \
+                `d3_open_price` = %s, \
+                `d4_open_price` = %s, \
+                `d5_open_price` = %s, \
+                `d6_open_price` = %s, \
+                `d7_open_price` = %s, \
                 `d_3_high_price` = %s, \
                 `d_2_high_price` = %s, \
                 `d_1_high_price` = %s, \
@@ -244,17 +244,17 @@ class DexDBConnAPI():
                 `d5_low_price` = %s, \
                 `d6_low_price` = %s, \
                 `d7_low_price` = %s, \
-                `d_3_closing_price` = %s, \
-                `d_2_closing_price` = %s, \
-                `d_1_closing_price` = %s, \
-                `d0_closing_price` = %s, \
-                `d1_closing_price` = %s, \
-                `d2_closing_price` = %s, \
-                `d3_closing_price` = %s, \
-                `d4_closing_price` = %s, \
-                `d5_closing_price` = %s, \
-                `d6_closing_price` = %s, \
-                `d7_closing_price` = %s, \
+                `d_3_close_price` = %s, \
+                `d_2_close_price` = %s, \
+                `d_1_close_price` = %s, \
+                `d0_close_price` = %s, \
+                `d1_close_price` = %s, \
+                `d2_close_price` = %s, \
+                `d3_close_price` = %s, \
+                `d4_close_price` = %s, \
+                `d5_close_price` = %s, \
+                `d6_close_price` = %s, \
+                `d7_close_price` = %s, \
                 `d_3_v` = %s, \
                 `d_2_v` = %s, \
                 `d_1_v` = %s, \

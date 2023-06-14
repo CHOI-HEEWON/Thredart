@@ -47,7 +47,7 @@ class KiwoomAPI(Bot):
         self.api.connect('on_receive_tr_data', signal=self.balance, slot=self.server.balance)   
         self.api.connect('on_receive_tr_data', signal=self.opt10032, slot=self.server.opt10032)  
         self.api.connect('on_receive_tr_data', signal=self.opt10001, slot=self.server.opt10001)  
-        self.api.connect('on_receive_real_data', signal=self.insert_stock_data, slot=self.server.insert_stock_data)
+        self.api.connect('on_receive_real_data', signal=self.insert_kospi_kosdaq_stock_data, slot=self.server.insert_kospi_kosdaq_stock_data)
 
     def run(self):
         """
@@ -324,9 +324,9 @@ class KiwoomAPI(Bot):
         return kr_stock_list
     
     # 실시간 호가 및 체결 데이터 조회
-    def insert_stock_data(self, scr_no, stock_list, fid_list, opt_type):
+    def insert_kospi_kosdaq_stock_data(self, scr_no, stock_list, fid_list, opt_type):
         try:
-            print('KiwoomAPI.insert_stock_data(self, scr_no, code_list, fid_list, opt_type) 호출')  
+            print('KiwoomAPI.insert_kospi_kosdaq_stock_data(self, scr_no, code_list, fid_list, opt_type) 호출')  
 
             kr_stock_list = self.get_kospi_kosdaq_stock_list()
             # print("kr_stock_list : " + str(kr_stock_list))
@@ -350,10 +350,10 @@ class KiwoomAPI(Bot):
 
             self.api.loop()
 
-            print('KiwoomAPI.insert_stock_data(self, scr_no, code_list, fid_list, opt_type) 종료')  
+            print('KiwoomAPI.insert_kospi_kosdaq_stock_data(self, scr_no, code_list, fid_list, opt_type) 종료')  
 
         except Exception as e:
-            print("Error occurred in KiwoomAPI.insert_stock_data: " + e)           
+            print("Error occurred in KiwoomAPI.insert_kospi_kosdaq_stock_data: " + e)           
 
     # 호가 데이터 개수 조회
     def select_stock_hoga_cnt(self):
@@ -405,7 +405,7 @@ class MyServer(Server):
         self.ret_data = {}   
         self.ret_data_list = []
         self.ret_data_dict = {}    
-        self.is_insert_stock_data_enabled = False  # opt10001 요청 시 insert_stock_data 호출되는 오류 해결
+        self.is_insert_kospi_kosdaq_stock_data_enabled = False  # opt10001 요청 시 insert_kospi_kosdaq_stock_data 호출되는 오류 해결
 
     def login(self, err_code):
         """
@@ -613,16 +613,16 @@ class MyServer(Server):
         print('\tServer.opt10001(self, screen_no, rq_name, tr_code, record_name, prev_next) 종료')  
 
     # 실시간 호가 및 체결 데이터 조회
-    def insert_stock_data(self, code, real_type, real_data):
+    def insert_kospi_kosdaq_stock_data(self, code, real_type, real_data):
         try:
-            # print('\tServer.insert_stock_data(self, code, real_type, real_data) 호출')
-            # print('\t\t', self.is_insert_stock_data_enabled)
+            # print('\tServer.insert_kospi_kosdaq_stock_data(self, code, real_type, real_data) 호출')
+            # print('\t\t', self.is_insert_kospi_kosdaq_stock_data_enabled)
 
             # 오전 11시시 프로그램 종료
             if datetime.now().strftime("%H:%M:%S") == END_TIME:
                 self.api.unloop()        
 
-            # if not self.is_insert_stock_data_enabled:
+            # if not self.is_insert_kospi_kosdaq_stock_data_enabled:
             #     return
 
             real_data_list = real_data.split()
@@ -664,7 +664,7 @@ class MyServer(Server):
                 for i, row in ret_df.iterrows():
                     self.dBConnAPI.insert_stock_hoga(row)
 
-            # print('\tServer.insert_stock_data(self, code, real_type, real_data) 종료')
+            # print('\tServer.insert_kospi_kosdaq_stock_data(self, code, real_type, real_data) 종료')
 
         except Exception as e:
-            print("Error occurred in Server.insert_stock_data: " + e)                
+            print("Error occurred in Server.insert_kospi_kosdaq_stock_data: " + e)                

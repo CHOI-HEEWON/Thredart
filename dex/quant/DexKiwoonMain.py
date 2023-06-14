@@ -27,18 +27,18 @@ class DexKiwoonMain():
         self.dexKiwoomAPI.opt10080()             
 
     # dex 매도
-    def dex_sell(self):
-        self.dexKiwoomAPI.dex_sell()             
+    def hex_sell(self):
+        self.dexKiwoomAPI.hex_sell()             
 
     # dex 매수
-    def dex_buy(self):
-        self.dexKiwoomAPI.dex_buy()          
+    def hex_buy(self):
+        self.dexKiwoomAPI.hex_buy()          
 
 
 # ========== #    
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     dexKiwoomMain = DexKiwoonMain()
-    # dexKiwoomMain.dex_sell()  # 10:00
-    dexKiwoomMain.dex_buy()
+    # dexKiwoomMain.hex_sell()  # 10:00
+    dexKiwoomMain.hex_buy()
     # dexKiwoomMain.dexCollector()
