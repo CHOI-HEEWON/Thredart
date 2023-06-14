@@ -1,4 +1,5 @@
 import requests
+import json
 import csv
 import time
 import pandas as pd
@@ -30,7 +31,7 @@ end_date = time.strftime('%Y-%m-%d')  # 현재 날짜
 columns = ['date', 'symbol', 'name', 'exchange']
 for column in ['open', 'high', 'low', 'close', 'volume']:
     for i in range(-3, 8):
-        columns.append(f'{column}_D{i}')
+        columns.append(f'{column}_d{i}')
 
 # 데이터 저장용 리스트
 filtered_data = []
@@ -42,7 +43,11 @@ for symbol, name, exchange in symbol_list:
 
     # API 요청 및 응답 데이터 가져오기
     response = requests.get(url)
-    data = response.json()
+
+    try:    
+        data = response.json()
+    except json.decoder.JSONDecodeError:
+        pass  # 데이터를 건너뛰고 다음 작업으로 넘어감      
 
     # 종목별로 데이터 조회 및 필터링
     if 'Time Series (Daily)' in data:
@@ -78,13 +83,12 @@ for symbol, name, exchange in symbol_list:
                         for column in ['open', 'high', 'low', 'close', 'volume']:
                             for i in range(-3, 8):
                                 cur_date_loc = idx + i
-                                key = f"{column}_D{i}"
                                 if cur_date_loc < len(filtered_time_series):
                                    cur_date = list(filtered_time_series.keys())[idx+i]
                                    value = filtered_time_series[cur_date].get(column, '')
-                                   row.append((key, value))
+                                   row.append(value)
                                 else:
-                                   row.append((key, ''))
+                                   row.append('')
                         print(row)
                         filtered_data.append(row)
 
