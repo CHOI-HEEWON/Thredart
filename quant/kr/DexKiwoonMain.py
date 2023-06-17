@@ -39,6 +39,7 @@ class DexKiwoonMain():
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     dexKiwoomMain = DexKiwoonMain()
+    dexKiwoomMain.opt10080()  # 10:00
     # dexKiwoomMain.hex_sell()  # 10:00
-    dexKiwoomMain.hex_buy()
+    # dexKiwoomMain.hex_buy()
     # dexKiwoomMain.dexCollector()
