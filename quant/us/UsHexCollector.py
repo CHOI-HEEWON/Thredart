@@ -1,11 +1,7 @@
 import requests
 import json
-import csv
 import pandas as pd
-import pytz
 import time
-import datetime
-import sys
 
 ######################## 설정 ########################
 # Alpha Vantage API 키
@@ -14,24 +10,24 @@ api_key = 'J8AQ46P2NB04MUOP'
 # 종목 티커 조회를 위한 API 요청
 CSV_URL = f'https://www.alphavantage.co/query?function=LISTING_STATUS&apikey={api_key}'
 
-# 날짜 범위 설정
-start_date = '1999-11-01'
-# 미국 동부 표준시 (EST) 타임존 설정
-est_timezone = pytz.timezone('America/New_York')
-# 현재 날짜와 시간 가져오기 (미국 동부 표준시)
-current_datetime = datetime.datetime.now(est_timezone)
-# 날짜 포맷 지정
-end_date = current_datetime.strftime('%Y-%m-%d')
+# # 날짜 범위 설정
+# start_date = '1999-11-01'
+# # 미국 동부 표준시 (EST) 타임존 설정
+# est_timezone = pytz.timezone('America/New_York')
+# # 현재 날짜와 시간 가져오기 (미국 동부 표준시)
+# current_datetime = datetime.datetime.now(est_timezone)
+# # 날짜 포맷 지정
+# end_date = current_datetime.strftime('%Y-%m-%d')
+
+# # 종목 티커 저장용 리스트
+# my_symbol_list = []
+# fnl_symbol_list = []
 
 # 컬럼 설정
 columns = ['date', 'symbol', 'name', 'exchange']
 for column in ['open', 'high', 'low', 'close', 'volume']:
     for i in range(-3, 8):
         columns.append(f'{column}_d{i}')
-
-# 종목 티커 저장용 리스트
-my_symbol_list = []
-fnl_symbol_list = []
 
 # 데이터 저장용 리스트
 filtered_data = []
@@ -40,7 +36,7 @@ filtered_data = []
 cnt = 0
 calls_today = 0
 call_limit_per_day = 500
-call_limit_per_minute = 4
+call_limit_per_minute = 5
 start_time = time.time()
 start_processing = False  # Flag variable
 
@@ -134,7 +130,7 @@ hex_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_
 stock_data_list = stock_data.values.tolist()
 
 # AACG, ATEST-L, CDTX, FTCI, IBRX
-symbol_nm = 'AACG'
+symbol_nm = 'SOFO'
 
 for row in stock_data_list:
     if row[0] == symbol_nm:
@@ -151,16 +147,15 @@ for row in stock_data_list:
         # API 요청 및 응답 데이터 가져오기
         response = requests.get(url)
 
+        print("symbol : " + str(symbol))
+
         try:
             data = response.json()
-
         except json.decoder.JSONDecodeError:
             print("json.decoder.JSONDecodeError")
             break
 
         if data:
-            print("symbol : " + str(symbol))
-
             if '5 calls per minute and 500 calls per day' in data:
                 print("5 calls per minute and 500 calls per day")
                 break
@@ -175,13 +170,9 @@ for row in stock_data_list:
                         {
                             date: {column.split(". ")[1]: value for column, value in values.items() if "." in column}
                             for date, values in time_series.items()
-                            if start_date <= date <= end_date
                         }.items()
                     )
                 )
-
-                print("filtered_time_series : " + str(filtered_time_series))
-                time.sleep(100)
 
                 # 데이터가 존재하는 경우 처리
                 if filtered_time_series:
@@ -192,8 +183,8 @@ for row in stock_data_list:
                             previous_date = list(filtered_time_series.keys())[idx-1]
 
                             # 종가 계산
-                            current_close = filtered_time_series.get(date, {}).get('close', '')
-                            previous_close = filtered_time_series.get(previous_date, {}).get('close', '')
+                            current_close = filtered_time_series.get(date, {}).get('close', 0)
+                            previous_close = filtered_time_series.get(previous_date, {}).get('close', 0)
                             
                             if current_close and previous_close:
                                 current_close = float(current_close)
@@ -220,7 +211,7 @@ for row in stock_data_list:
                                                 row.append(value)
                                             else:
                                                 row.append('')
-                                    print("\trow :" + str(row))
+                                    print("row :" + str(row))
                                     filtered_data.append(row)
 
                                     # 새로운 데이터프레임 생성
@@ -237,7 +228,7 @@ for row in stock_data_list:
         elapsed_time = time.time() - start_time
 
         print("\t\tcalls_today: " + str(calls_today))
-        print("\t\telapsed_time: " + str(elapsed_time))
+        # print("\t\telapsed_time: " + str(elapsed_time))
 
         if calls_today >= call_limit_per_day:
             break
@@ -245,7 +236,7 @@ for row in stock_data_list:
         if cnt % call_limit_per_minute == 0:
             elapsed_time = time.time() - start_time
             sleep_time = max(60 - elapsed_time, 0)
-            print(f"\t\t\tSleeping for {sleep_time} seconds to reset minute call limit")
+            print(f"\t\tSleeping for {sleep_time} seconds to reset minute call limit")
             time.sleep(sleep_time)
             start_time = time.time()
             cnt = 0
