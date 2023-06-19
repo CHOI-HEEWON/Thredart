@@ -7,8 +7,8 @@ import time
 # Alpha Vantage API 키
 api_key = 'J8AQ46P2NB04MUOP'
 
-# 종목 티커 조회를 위한 API 요청
-CSV_URL = f'https://www.alphavantage.co/query?function=LISTING_STATUS&apikey={api_key}'
+# # 종목 티커 조회를 위한 API 요청
+# CSV_URL = f'https://www.alphavantage.co/query?function=LISTING_STATUS&apikey={api_key}'
 
 # # 날짜 범위 설정
 # start_date = '1999-11-01'
@@ -130,7 +130,7 @@ hex_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_
 stock_data_list = stock_data.values.tolist()
 
 # AACG, ATEST-L, CDTX, FTCI, IBRX
-symbol_nm = 'SOFO'
+symbol_nm = 'VMCAU'
 
 for row in stock_data_list:
     if row[0] == symbol_nm:

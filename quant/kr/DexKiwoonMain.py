@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import *
 # ========== #
 class DexKiwoonMain():
     def __init__(self):
+
         super().__init__()
         self.dexKiwoomAPI = DexKiwoomAPI.DexKiwoomAPI(DexKiwoomAPI.MyServer())
         self.dexKiwoomAPI.run()  
@@ -26,6 +27,7 @@ class DexKiwoonMain():
     def opt10080(self):
         self.dexKiwoomAPI.opt10080()             
 
+
     # dex 매도
     def hex_sell(self):
         self.dexKiwoomAPI.hex_sell()             
@@ -35,11 +37,11 @@ class DexKiwoonMain():
         self.dexKiwoomAPI.hex_buy()          
 
 
-# ========== #    
+# ========== #    q
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     dexKiwoomMain = DexKiwoonMain()
-    dexKiwoomMain.opt10080()  # 10:00
-    # dexKiwoomMain.hex_sell()  # 10:00
+    dexKiwoomMain.opt10080()  # 10:00q
+    # dexKiwoomMain.hex_sell()  # 10:00q
     # dexKiwoomMain.hex_buy()
     # dexKiwoomMain.dexCollector()
