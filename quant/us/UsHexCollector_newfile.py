@@ -50,13 +50,14 @@ with requests.Session() as s:
     cr = csv.reader(decoded_content.splitlines(), delimiter=',')
     symbol_list = list(cr)
 
-print("len(symbol_list): " + str(len(symbol_list)))  # 11551
+print("len(symbol_list): " + str(len(symbol_list)))
 
 for row in symbol_list:
-    if all(token not in row[0] for token in ['ZVZZT', 'ZWZZT', 'ZXYZ-A', 'ZXZZT-A']) and 'Warrants' not in row[1] and row[2] in ['NASDAQ', 'NYSE MKT'] and row[3] == 'Stock':
+    # NASDAQ or NYSE MKT & Stock 조회, Warrants 제외, symbol len 5이상 제외, symbol = 'ZVZZT', 'ZWZZT', 'ZXYZ-A', 'ZXZZT-A' 제외
+    if all(token not in row[0] for token in ['ZVZZT', 'ZWZZT', 'ZXYZ-A', 'ZXZZT-A']) and 'Warrants' not in row[1] and row[2] in ['NASDAQ', 'NYSE MKT'] and row[3] == 'Stock' and len(row[0]) < 5:
         my_symbol_list.append(row[:5] + row[6:])
 
-print("len(my_symbol_list): " + str(len(my_symbol_list)))  # 4536
+print("len(my_symbol_list): " + str(len(my_symbol_list)))
 
 for row in my_symbol_list:
       symbol = row[0]
@@ -131,7 +132,11 @@ for row in my_symbol_list:
       elapsed_time = time.time() - start_time
 
       print("cnt : " + str(cnt))
+      print("calls_today: " + str(calls_today))
 
+      if calls_today >= call_limit_per_day:
+          break
+      
       if cnt % call_limit_per_minute == 0:
           elapsed_time = time.time() - start_time
           sleep_time = max(60 - elapsed_time, 0)

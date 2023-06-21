@@ -227,8 +227,8 @@ for row in stock_data_list:
         cnt += 1
         elapsed_time = time.time() - start_time
 
-        print("\t\tcalls_today: " + str(calls_today))
-        # print("\t\telapsed_time: " + str(elapsed_time))
+        print("cnt : " + str(cnt))
+        print("calls_today: " + str(calls_today))
 
         if calls_today >= call_limit_per_day:
             break
