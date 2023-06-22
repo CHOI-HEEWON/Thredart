@@ -2,6 +2,7 @@ import requests
 import csv
 import pandas as pd
 import time
+import sys
 
 
 # 종목 티커 저장용 리스트
@@ -22,14 +23,13 @@ filtered_data = []
 # 하루에 500번의 호출과 분당 5번의 호출
 cnt = 0
 calls_today = 0
-# call_limit_per_day = 500
 call_limit_per_minute = 5
 start_time = time.time()
-start_processing = False  # Flag variable
+start_processing = False
 next_processing = True
 
 # Alpha Vantage API 키
-api_key = 'J8AQ46P2NB04MUOP'
+api_key = '5XA0U3886DHOGE4C'
 
 stock_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_hex_0.4_list.xlsx')
 hex_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_hex_0.4_09_35_00_data.xlsx')
@@ -40,7 +40,7 @@ for row in stock_data_list:
     if len(row[1]) < 5:
         my_stock_data_list.append(row)
 
-symbol_nm = 'BTDR'
+symbol_nm = 'AWH'
 target_time = '09:35:00'
 
 for row in my_stock_data_list:
@@ -49,8 +49,11 @@ for row in my_stock_data_list:
     
     if start_processing:
         next_processing = True 
+        my_list = []      
+
         print("date : " + str(row[0]))
-        print("symbol : " + str(row[1]))           
+        print("symbol : " + str(row[1]))      
+
         date = row[0]
         symbol = row[1]
         name = row[2]
@@ -59,11 +62,12 @@ for row in my_stock_data_list:
         for y_cnt in range(1, 3):
             if not next_processing:
                 break                
-            print("\ty_cnt : " + str(y_cnt))
+            print("y_cnt : " + str(y_cnt))
+
             for m_cnt in range(1, 13):
                 if not next_processing:
                     break                     
-                print("\tm_cnt : " + str(m_cnt))
+                print("m_cnt : " + str(m_cnt))
                 # 알파베인티지(AlphaVantage) API - Intraday (Extended History)
                 CSV_URL = f'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY_EXTENDED&symbol={symbol}&interval=5min&slice=year{y_cnt}month{m_cnt}&outputsize=full&apikey={api_key}'
 
@@ -73,10 +77,10 @@ for row in my_stock_data_list:
                     cr = csv.reader(decoded_content.splitlines(), delimiter=',')
                     my_list = list(cr)[1:]
 
-                    if '5 calls per minute and 500 calls per day' in my_list:
-                        print("5 calls per minute and 500 calls per day")
-                        time.sleep(1000)
-                        break
+                    error_message = '5 calls per minute and 500 calls per day'
+                    if any(error_message in sublist[0] for sublist in my_list):
+                        print("Error message found in my_list")
+                        sys.exit()
 
                     fnl_my_list = []
                     for sublist in my_list:
@@ -88,7 +92,7 @@ for row in my_stock_data_list:
                     
                         if index is not None:
                             row = [date, symbol, name, exchange]
-                            
+
                             for column in ['open', 'high', 'low', 'close', 'volume']:
                                 if column == 'open': col_index = 1
                                 elif column == 'high': col_index = 2
@@ -105,8 +109,8 @@ for row in my_stock_data_list:
                                     else:
                                         row.append('')
 
+                            print("row :" + str(row))
                             filtered_data.append(row)    
-                            print("\tfiltered_data :" + str(filtered_data))
 
                             # 새로운 데이터프레임 생성
                             fnl_symbol_df = pd.DataFrame(filtered_data, columns=columns)
@@ -120,26 +124,21 @@ for row in my_stock_data_list:
                             next_processing = False
 
                             break
-
-            cnt += 1
-            calls_today += 1
-            elapsed_time = time.time() - start_time
-
-            print("\tcnt : " + str(cnt))
-            print("\tcalls_today: " + str(calls_today))
-
-            # if calls_today >= call_limit_per_day:
-            #     break
-
-            if cnt % call_limit_per_minute == 0:
+                cnt += 1
+                calls_today += 1
                 elapsed_time = time.time() - start_time
-                sleep_time = max(60 - elapsed_time, 0)
-                print(f"\t\tSleeping for {sleep_time} seconds to reset minute call limit")
-                time.sleep(sleep_time)
-                start_time = time.time()
-                cnt = 0
+
+                print("\tcnt : " + str(cnt))
+                print("\tcalls_today: " + str(calls_today))
+
+                time.sleep(5)
+
+                if cnt % call_limit_per_minute == 0:
+                    elapsed_time = time.time() - start_time
+                    sleep_time = max(60 - elapsed_time, 0)
+                    print(f"\t\tSleeping for {sleep_time} seconds to reset minute call limit")
+                    time.sleep(sleep_time)
+                    start_time = time.time()
+                    cnt = 0
 
 print("Data collection and sorting completed.")
-
-
-
