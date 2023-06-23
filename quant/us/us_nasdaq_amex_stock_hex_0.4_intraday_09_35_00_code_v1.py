@@ -31,7 +31,7 @@ next_processing = True
 # Alpha Vantage API 키
 api_key = '5XA0U3886DHOGE4C'
 
-stock_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_hex_0.4_list.xlsx')
+stock_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_hex_0.4_list_data.xlsx')
 hex_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_hex_0.4_intraday_09_35_00_data.xlsx')
 
 # 데이터프레임을 리스트로 변환

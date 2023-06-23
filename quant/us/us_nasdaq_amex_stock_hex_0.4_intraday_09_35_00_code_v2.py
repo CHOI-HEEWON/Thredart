@@ -34,7 +34,7 @@ next_processing = True
 # api_key = '6NZBSL488LQRXW6R'
 api_key = '5XA0U3886DHOGE4C'
 
-stock_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_hex_0.4_list.xlsx')
+stock_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_hex_0.4_list_data.xlsx')
 hex_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_hex_0.4_intraday_09_35_00_data.xlsx')
 
 # 데이터프레임을 리스트로 변환
@@ -43,12 +43,12 @@ for row in stock_data_list:
     if len(row[1]) < 5:
         my_stock_data_list.append(row)
 
-fix_symbol = 'BTDR'
-fix_date = '2023-06-16'
+target_symbol = 'BTDR'
+target_date = '2023-06-16'
 target_time = '09:31:00'
 
 for row in my_stock_data_list:
-    if row[0] == fix_date and row[1] == fix_symbol:
+    if row[0] == target_date and row[1] == target_symbol:
         start_processing = True
     
     if start_processing:

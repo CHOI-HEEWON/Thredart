@@ -24,17 +24,16 @@ call_limit_per_minute = 5
 start_time = time.time()
 start_processing = False  # Flag variable
 
-stock_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_list_all.xlsx')
-hex_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_hex_0.4_data.xlsx')
+stock_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_list.xlsx')
+hex_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_hex_0.4_daily_data.xlsx')
 
 # 데이터프레임을 리스트로 변환
 stock_data_list = stock_data.values.tolist()
 
-# AACG, ATEST-L, CDTX, FTCI, IBRX
-symbol_nm = 'VMCAU'
+target_symbol = 'VMCAU'
 
 for row in stock_data_list:
-    if row[0] == symbol_nm:
+    if row[0] == target_symbol:
         start_processing = True
     
     if start_processing:
@@ -112,6 +111,7 @@ for row in stock_data_list:
                                                 row.append(value)
                                             else:
                                                 row.append('')
+
                                     print("row :" + str(row))
                                     filtered_data.append(row)
 
@@ -122,7 +122,7 @@ for row in stock_data_list:
                                     updated_data = pd.concat([hex_data, fnl_symbol_df], ignore_index=False)
 
                                     # 업데이트된 데이터를 Excel 파일로 저장 (index 제거)
-                                    updated_data.to_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_hex_0.4_data.xlsx', index=False)                                         
+                                    updated_data.to_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_hex_0.4_daily_data.xlsx', index=False)                                         
 
         calls_today += 1
         cnt += 1
