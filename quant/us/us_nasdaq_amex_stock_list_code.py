@@ -21,9 +21,13 @@ with requests.Session() as s:
     symbol_list = list(cr)
 
 for row in symbol_list:
-    # NASDAQ or NYSE MKT & Stock 조회, Warrants 제외, symbol len 5이상 제외, symbol = 'ZVZZT', 'ZWZZT', 'ZXYZ-A', 'ZXZZT-A' 제외
-    if all(token not in row[0] for token in ['ZVZZT', 'ZWZZT', 'ZXYZ-A', 'ZXZZT-A']) and 'Warrants' not in row[1] and row[2] in ['NASDAQ', 'NYSE MKT'] and row[3] == 'Stock' and len(row[0]) < 5:
-        my_symbol_list.append(row[:5] + row[6:])
+    if all(token not in row[0] for token in ['ZVZZT', 'ZWZZT', 'ZXYZ-A', 'ZXZZT-A']) \
+        and row[2] in ['NASDAQ', 'NYSE MKT'] \
+        and row[3] == 'Stock' \
+        and len(row[0]) < 5:
+        
+        ticker = row[:5] + row[6:]
+        my_symbol_list.append(ticker)
 
 # 데이터프레임 생성
 df = pd.DataFrame(my_symbol_list, columns=columns)
