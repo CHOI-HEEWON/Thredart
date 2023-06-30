@@ -19,7 +19,7 @@ filtered_data = []
 # 하루에 500번의 호출과 분당 5번의 호출
 cnt = 0
 calls_today = 0
-call_limit_per_day = 500
+# call_limit_per_day = 500
 call_limit_per_minute = 5
 start_time = time.time()
 start_processing = False  # Flag variable
@@ -30,7 +30,7 @@ hex_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_
 # 데이터프레임을 리스트로 변환
 stock_data_list = stock_data.values.tolist()
 
-target_symbol = 'AACG'
+target_symbol = 'EBIX'
 
 for row in stock_data_list:
     if row[0] == target_symbol:
@@ -91,14 +91,6 @@ for row in stock_data_list:
                                 previous_close = float(previous_close)
                                 price_change_ratio = (current_close - previous_close) / previous_close  # (현재종가 - 전일종가) / 전일종가
 
-                                # print("idx : " + str(idx))
-                                # print("name : " + str(name))
-                                # print("date : " + str(date))
-                                # print("previous_date : " + str(previous_date))
-                                # print("current_close : " + str(current_close))
-                                # print("previous_close : " + str(previous_close))
-                                # print("price_change_ratio : " + str(price_change_ratio))
-
                                 # 급등주 비율이 0.4 이상인 경우 종목 데이터 추가
                                 if price_change_ratio >= 0.4:
                                     row = [date, symbol, name, exchange]
@@ -131,8 +123,8 @@ for row in stock_data_list:
         print("cnt : " + str(cnt))
         print("calls_today: " + str(calls_today))
 
-        if calls_today >= call_limit_per_day:
-            break
+        # if calls_today >= call_limit_per_day:
+        #     break
 
         if cnt % call_limit_per_minute == 0:
             elapsed_time = time.time() - start_time
