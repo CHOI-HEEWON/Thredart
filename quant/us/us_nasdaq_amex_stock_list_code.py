@@ -21,7 +21,7 @@ with requests.Session() as s:
     symbol_list = list(cr)
 
 for row in symbol_list:
-    if all(token not in row[0] for token in ['ZVZZT', 'ZWZZT', 'ZXYZ-A', 'ZXZZT-A']) \
+    if row[0] not in ['ZVZZT', 'ZWZZT', 'ZXYZ-A', 'ZXZZT-A', 'GMGT', 'GMVD', 'CRGE', 'POWW', 'SOBR', 'MEDS', 'NCRA', 'RELI', 'RCAT', 'EP', 'ZYRX', 'TOP'] \
         and row[2] in ['NASDAQ', 'NYSE MKT'] \
         and row[3] == 'Stock' \
         and len(row[0]) < 5:
@@ -33,8 +33,22 @@ for row in symbol_list:
 df = pd.DataFrame(my_symbol_list, columns=columns)
 
 # Excel 파일로 저장
-file_name = f'us_nasdaq_amex_stock_list.xlsx'
+file_name = f'us_nasdaq_amex_stock_list_data.xlsx'
 excel_file_path = 'C:/Users/Choi Heewon/thredart/quant/us/data/' + file_name
 df.to_excel(excel_file_path, index=False)
 
 print("Data collection and sorting completed.")
+
+# [에러종목]
+# GMGT > OTCM(Other OTC)
+# GMVD  
+# CRGE
+# POWW
+# SOBR
+# MEDS
+# NCRA
+# RELI  
+# RCAT
+# EP
+# ZYRX
+# TOP

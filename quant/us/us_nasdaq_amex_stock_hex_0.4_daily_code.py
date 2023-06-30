@@ -10,7 +10,7 @@ api_key = 'J8AQ46P2NB04MUOP'
 # 컬럼 설정
 columns = ['date', 'symbol', 'name', 'exchange']
 for column in ['open', 'high', 'low', 'close', 'volume']:
-    for i in range(-3, 8):
+    for i in range(-3, 15):
         columns.append(f'{column}_d{i}')
 
 # 데이터 저장용 리스트
@@ -24,13 +24,13 @@ call_limit_per_minute = 5
 start_time = time.time()
 start_processing = False  # Flag variable
 
-stock_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_list.xlsx')
+stock_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_list_data.xlsx')
 hex_data = pd.read_excel('C:/Users/Choi Heewon/thredart/quant/us/data/us_nasdaq_amex_stock_hex_0.4_daily_data.xlsx')
 
 # 데이터프레임을 리스트로 변환
 stock_data_list = stock_data.values.tolist()
 
-target_symbol = 'VMCAU'
+target_symbol = 'AACG'
 
 for row in stock_data_list:
     if row[0] == target_symbol:
@@ -103,7 +103,7 @@ for row in stock_data_list:
                                 if price_change_ratio >= 0.4:
                                     row = [date, symbol, name, exchange]
                                     for column in ['open', 'high', 'low', 'close', 'volume']:
-                                        for i in range(-3, 8):
+                                        for i in range(-3, 15):
                                             cur_date_loc = idx + i
                                             if cur_date_loc < len(filtered_time_series):
                                                 cur_date = list(filtered_time_series.keys())[idx+i]
