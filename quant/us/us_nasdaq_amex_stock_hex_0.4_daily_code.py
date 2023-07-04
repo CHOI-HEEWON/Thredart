@@ -19,7 +19,6 @@ filtered_data = []
 # 하루에 500번의 호출과 분당 5번의 호출
 cnt = 0
 calls_today = 0
-# call_limit_per_day = 500
 call_limit_per_minute = 5
 start_time = time.time()
 start_processing = False  # Flag variable
@@ -119,12 +118,6 @@ for row in stock_data_list:
         calls_today += 1
         cnt += 1
         elapsed_time = time.time() - start_time
-
-        print("cnt : " + str(cnt))
-        print("calls_today: " + str(calls_today))
-
-        # if calls_today >= call_limit_per_day:
-        #     break
 
         if cnt % call_limit_per_minute == 0:
             elapsed_time = time.time() - start_time

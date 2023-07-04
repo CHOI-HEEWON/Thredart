@@ -38,17 +38,3 @@ excel_file_path = 'C:/Users/Choi Heewon/thredart/quant/us/data/' + file_name
 df.to_excel(excel_file_path, index=False)
 
 print("Data collection and sorting completed.")
-
-# [에러종목]
-# GMGT > OTCM(Other OTC)
-# GMVD  
-# CRGE
-# POWW
-# SOBR
-# MEDS
-# NCRA
-# RELI  
-# RCAT
-# EP
-# ZYRX
-# TOP

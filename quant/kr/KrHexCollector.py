@@ -1,71 +1,82 @@
 from pykrx import stock
 from datetime import datetime, timedelta
 import pandas as pd
-from DexDBConnAPI import *
+from KrHexDBConnAPI import *
 
 
-# DB 연결
-dexDBConnAPI = DexDBConnAPI()    
+# ========== #
+class KrHexCollector:
+   def __init__(self):
+      super().__init__()
 
-# 시작일과 종료일 설정
-start_date = datetime.now() - timedelta(days=30)
-end_date = datetime.now().date()
+      # DB 연결
+      self.krHexDBConnAPI = KrHexDBConnAPI()    
+           
+   def get_new_kr_hex_stock_data(self):
 
-# 컬럼 생성
-columns = ['날짜', '종목코드', '종목명']
-for column in ['시가', '고가', '저가', '종가', '거래대금']:
-  for i in range(-3, 8):
-    columns.append(f'{column}_D{i}')
+      # 시작일과 종료일 설정
+      start_date = datetime.now() - timedelta(days=15)
+      end_date = datetime.now().date()
 
-data = pd.DataFrame(columns=columns)
+      # 컬럼 생성
+      columns = ['날짜', '종목코드', '종목명']
+      for column in ['시가', '고가', '저가', '종가', '거래대금']:
+         for i in range(-3, 8):
+            columns.append(f'{column}_D{i}')
 
-# 코스피 & 코스닥 종목코드
-tickers_kospi = stock.get_market_ticker_list()  
-tickers_kosdaq = stock.get_market_ticker_list(market="KOSDAQ") 
-tickers = tickers_kospi + tickers_kosdaq  
+      data = pd.DataFrame(columns=columns)
 
-# 상한가 날짜 조회
-hex_date = dexDBConnAPI.select_hex_date()
+      # 코스피 & 코스닥 종목코드
+      tickers_kospi = stock.get_market_ticker_list()  
+      tickers_kosdaq = stock.get_market_ticker_list(market="KOSDAQ") 
+      tickers = tickers_kospi + tickers_kosdaq  
 
-for ticker in tickers:
-    if "K" not in ticker and "L" not in ticker:
-        df = stock.get_market_ohlcv_by_date(start_date.strftime("%Y%m%d"), end_date.strftime("%Y%m%d"), ticker) 
+      # 기존 상한가 데이터 날짜 조회
+      hex_date = self.krHexDBConnAPI.select_existing_kr_hex_date()
 
-        for date in df.index: 
-            date_index_idx = df.index.get_loc(date) 
+      for ticker in tickers:
+         if "K" not in ticker and "L" not in ticker:
+            df = stock.get_market_ohlcv_by_date(start_date.strftime("%Y%m%d"), end_date.strftime("%Y%m%d"), ticker) 
 
-            if date_index_idx - 3 >= 0:
-               pre_date = df[df.index < pd.to_datetime(date)].index  
+            for date in df.index: 
+                  date_index_idx = df.index.get_loc(date) 
 
-               pre_date = pre_date[-1]
-               df_copy = df[df.index == date].copy()  
-               df_copy['전일종가'] = df.loc[pre_date, '종가']
-               target_df = df_copy[(df_copy['종가'] - df_copy['전일종가']) / df_copy['전일종가'] >= 0.28]  
+                  if date_index_idx - 3 >= 0:
+                     pre_date = df[df.index < pd.to_datetime(date)].index  
 
-               if not target_df.empty:
-                  target_date = target_df.index[0]
-                  row = {'날짜': target_date, '종목명': stock.get_market_ticker_name(ticker), '종목코드': ticker}
+                     pre_date = pre_date[-1]
+                     df_copy = df[df.index == date].copy()  
+                     df_copy['전일종가'] = df.loc[pre_date, '종가']
+                     target_df = df_copy[(df_copy['종가'] - df_copy['전일종가']) / df_copy['전일종가'] >= 0.28]  
 
-                  for i in range(-3, 8):
-                        target_index_idx = df.index.get_loc(target_date) 
+                     if not target_df.empty:
+                        target_date = target_df.index[0]
+                        row = {'날짜': target_date, '종목명': stock.get_market_ticker_name(ticker), '종목코드': ticker}
 
-                        if target_index_idx + i < len(df.index) and target_index_idx + i >= 0:  
-                           cur_date = df.index[df.index.get_loc(target_date) + i]
+                        for i in range(-3, 8):
+                              target_index_idx = df.index.get_loc(target_date) 
 
-                           for column in ['시가', '고가', '저가', '종가', '거래대금']:
-                              row[f'{column}_D{i}'] = df.loc[cur_date, column]
+                              if target_index_idx + i < len(df.index) and target_index_idx + i >= 0:  
+                                 cur_date = df.index[df.index.get_loc(target_date) + i]
 
-                        else:
-                           row[f'시가_D{i}'] = None
-                           row[f'고가_D{i}'] = None
-                           row[f'저가_D{i}'] = None
-                           row[f'종가_D{i}'] = None
-                           row[f'거래대금_D{i}'] = None
+                                 for column in ['시가', '고가', '저가', '종가', '거래대금']:
+                                    row[f'{column}_D{i}'] = df.loc[cur_date, column]
 
-                  if target_date.date() in hex_date:
-                     dexDBConnAPI.update_hex_stock_list(row)     
-                  else:    
-                     dexDBConnAPI.insert_hex_stock_list(row)
-                          
+                              else:
+                                 row[f'시가_D{i}'] = None
+                                 row[f'고가_D{i}'] = None
+                                 row[f'저가_D{i}'] = None
+                                 row[f'종가_D{i}'] = None
+                                 row[f'거래대금_D{i}'] = None
 
-print("Data collection and sorting completed.")
+                        if target_date.date() in hex_date:
+                           self.krHexDBConnAPI.update_kr_hex_stock_data(row)     
+                        else:    
+                           self.krHexDBConnAPI.insert_kr_hex_stock_data(row)
+                              
+
+      print("Data collection and sorting completed.")
+
+if __name__ == '__main__':
+    krHexCollector = KrHexCollector()
+    krHexCollector.new_kr_hex_stock_list()
