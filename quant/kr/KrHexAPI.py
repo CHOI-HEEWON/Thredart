@@ -4,11 +4,11 @@ from kiwoom.utils import name
 from PyQt5.QtWidgets import *
 from PyQt5.QAxContainer import *
 from PyQt5.QtCore import *
-import KrHexDBConnAPI
 import pandas as pd
-from KrHexTrList import *
 from textwrap import dedent
 import time
+import KrHexDBConnAPI
+from KrHexTrList import *
 
 
 # ========== #
