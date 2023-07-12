@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Feb 14 17:04:04 2022
+
+"""
+
+import os
 import time, copy
 import yaml
 import requests
@@ -8,7 +15,10 @@ import pandas as pd
 from collections import namedtuple
 from datetime import datetime
 
-with open(r'C:/Users/Choi Heewon/thredart/quant/us/kisdev.yaml', encoding='UTF-8') as f:
+script_dir = os.path.dirname(os.path.abspath(__file__))
+yaml_path = os.path.join(script_dir, 'kisdev.yaml')
+
+with open(yaml_path, encoding='UTF-8') as f:
     _cfg = yaml.load(f, Loader=yaml.FullLoader)
 
 _TRENV = tuple()
@@ -65,13 +75,13 @@ def changeTREnv(token_key, svr='prod', product='01'):
     cfg['my_sec'] = _cfg[ak2]   
 
     if svr == 'prod' and product == '01':
-        cfg['my_acct'] = _cfg['my_acct_stock']
-    elif svr == 'prod' and product == '03':
-        cfg['my_acct'] = _cfg['my_acct_future']
-    elif svr == 'vps' and product == '01':        
-        cfg['my_acct'] = _cfg['my_paper_stock']
-    elif svr == 'vps' and product == '03':        
-        cfg['my_acct'] = _cfg['my_paper_future']
+        cfg['my_acct'] = _cfg['my_acct']
+    # elif svr == 'prod' and product == '03':
+    #     cfg['my_acct'] = _cfg['my_acct_future']
+    # elif svr == 'vps' and product == '01':        
+    #     cfg['my_acct'] = _cfg['my_paper_stock']
+    # elif svr == 'vps' and product == '03':        
+    #     cfg['my_acct'] = _cfg['my_paper_future']
 
     cfg['my_prod'] = product
     cfg['my_phone'] = _cfg['my_phone'] 
@@ -87,13 +97,13 @@ def _getResultObject(json_data):
     return _tc_(**json_data)
 
 def auth(svr='prod', product='01'):
-
     p = {
         "grant_type": "client_credentials",
         "personalphone": _cfg['my_phone'],
         "personalname": '김한투'
     }
     print(svr)
+
     if svr == 'prod':
         ak1 = 'my_app'
         ak2 = 'my_sec'

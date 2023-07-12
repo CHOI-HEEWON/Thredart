@@ -32,13 +32,13 @@ class KrHexMain:
     def get_new_kr_hex_stock_data(self):
         self.krHexCollector.get_new_kr_hex_stock_data()
 
-    # krHex 매도
-    def kr_hex_sell(self):
-        self.kiwoomAPI.kr_hex_sell()             
+    # KR HEX 매도
+    def kr_hex_sell_order(self):
+        self.kiwoomAPI.kr_hex_sell_order()             
 
-    # krHex 매수
-    def kr_hex_buy(self):
-        self.kiwoomAPI.kr_hex_buy()          
+    # KR HEX 매수
+    def kr_hex_buy_order(self):
+        self.kiwoomAPI.kr_hex_buy_order()          
 
 
 # ========== #    
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     krHexMain = KrHexMain()
 
     # # 매도(08:30-09:00)   
-    # krHexMain.kr_hex_sell() 
+    # krHexMain.kr_hex_sell_order() 
 
     # # 매수(15:20-15:30)    
     # krHexMain.hex_buy()

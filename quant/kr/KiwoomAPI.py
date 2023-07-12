@@ -217,8 +217,8 @@ class KiwoomAPI(Bot):
         print('KiwoomAPI.opt10075(rq_name, tr_code, prev_next, scr_no) 종료')
 
     # hex 매도
-    def kr_hex_sell(self):    
-        print('KiwoomAPI.kr_hex_sell(self) 호출')
+    def kr_hex_sell_order(self):    
+        print('KiwoomAPI.kr_hex_sell_order(self) 호출')
 
         hex_date, ticker_list = self.krHexDBConnAPI.select_kr_hex_ticker_order_status_1()
 
@@ -241,7 +241,7 @@ class KiwoomAPI(Bot):
                 row = {'날짜': hex_date, '종목코드': ticker}
                 self.krHexDBConnAPI.update_kr_hex_ticker_order_status_2(row)
 
-        print('KiwoomAPI.kr_hex_sell(self) 종료')
+        print('KiwoomAPI.kr_hex_sell_order(self) 종료')
 
     def trade_sell(self, ticker, qty, price):
         print('KiwoomAPI.trade_sell(self, ticker, qty, price) 호출')
@@ -273,8 +273,8 @@ class KiwoomAPI(Bot):
         print('KiwoomAPI.trade_sell(self, ticker, qty, price) 종료')
 
     # hex 매수
-    def kr_hex_buy(self):      
-        print('KiwoomAPI.kr_hex_buy(self) 호출')
+    def kr_hex_buy_order(self):      
+        print('KiwoomAPI.kr_hex_buy_order(self) 호출')
 
         score = 0
         ticker_list = []
@@ -313,7 +313,7 @@ class KiwoomAPI(Bot):
         # for ticker in ticker_list:
         #     self.trade_buy(ticker, qty, buy_price)  # 매수   
 
-        print('KiwoomAPI.kr_hex_buy(self) 종료')
+        print('KiwoomAPI.kr_hex_buy_order(self) 종료')
 
     def trade_buy(self, ticker, qty, price):
         print('KiwoomAPI.trade_buy(self, ticker, qty, price) 호출')
