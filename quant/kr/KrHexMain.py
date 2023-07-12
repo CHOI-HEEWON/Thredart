@@ -1,5 +1,5 @@
 import sys
-import KrHexAPI, KrHexCollector
+import KiwoomAPI, KrHexCollector
 from PyQt5.QtWidgets import *
 
 
@@ -8,25 +8,25 @@ class KrHexMain:
     def __init__(self):
         super().__init__()
         
-        self.krHexAPI = KrHexAPI.KrHexAPI(KrHexAPI.MyServer())
-        self.krHexAPI.run()  
-        self.krHexAPI.account()   
-        # self.krHexAPI.deposit()  
-        # self.krHexAPI.balance()    
+        self.kiwoomAPI = KiwoomAPI.KiwoomAPI(KiwoomAPI.MyServer())
+        self.kiwoomAPI.run()  
+        self.kiwoomAPI.account()   
+        # self.kiwoomAPI.deposit()  
+        # self.kiwoomAPI.balance()    
 
         self.krHexCollector = KrHexCollector.KrHexCollector()        
 
     # # 주식시분요청
     # def opt10006(self):
-    #     self.krHexAPI.opt10006()     
+    #     self.kiwoomAPI.opt10006()     
 
     # # 주식분봉차트조회요청
     # def opt10080(self):
-    #     self.krHexAPI.opt10080()    
+    #     self.kiwoomAPI.opt10080()    
 
     # # 상하한가요청
     # def opt10017(self):
-    #     self.krHexAPI.opt10017()
+    #     self.kiwoomAPI.opt10017()
 
     # 상한가 새 데이터 조회, INSERT, UPDATE
     def get_new_kr_hex_stock_data(self):
@@ -34,11 +34,11 @@ class KrHexMain:
 
     # krHex 매도
     def kr_hex_sell(self):
-        self.krHexAPI.kr_hex_sell()             
+        self.kiwoomAPI.kr_hex_sell()             
 
     # krHex 매수
     def kr_hex_buy(self):
-        self.krHexAPI.kr_hex_buy()          
+        self.kiwoomAPI.kr_hex_buy()          
 
 
 # ========== #    

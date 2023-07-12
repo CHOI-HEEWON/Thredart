@@ -13,7 +13,7 @@ from KrHexTrList import *
 
 # ========== #
 # 서버에 데이터를 요청하는 클래스
-class KrHexAPI(Bot):
+class KiwoomAPI(Bot):
     def __init__ (self, server=None):
         super().__init__(server)
         config.MUTE = True
@@ -39,7 +39,7 @@ class KrHexAPI(Bot):
         self.api.connect('on_receive_tr_data', signal=self.opt10080 , slot=self.server.opt10080)
         
     def run(self):
-        print('KrHexAPI.run() 호출')
+        print('KiwoomAPI.run() 호출')
 
         self.login()    
 
@@ -50,15 +50,15 @@ class KrHexAPI(Bot):
         #     print(f'{key}: {val}')      
         # 
         
-        print('KrHexAPI.run() 종료')
+        print('KiwoomAPI.run() 종료')
 
     def login(self):
-        print('\tKrHexAPI.login() 호출')
+        print('\tKiwoomAPI.login() 호출')
 
         self.api.comm_connect()
         self.api.loop()
 
-        print('\tKrHexAPI.login() 종료')
+        print('\tKiwoomAPI.login() 종료')
 
     def account(self):
         # 로그인 계좌 정보확인 API 개발가이드
@@ -153,7 +153,7 @@ class KrHexAPI(Bot):
     
     # 주식시분요청
     def opt10006(self, ticker, rq_name='opt10006', tr_code='opt10006', prev_next='0', scr_no='0101'):
-        print('KrHexAPI.opt10006(rq_name, tr_code, prev_next, scr_no) 호출')
+        print('KiwoomAPI.opt10006(rq_name, tr_code, prev_next, scr_no) 호출')
 
         self.api.set_input_value("종목코드", ticker)
 
@@ -161,11 +161,11 @@ class KrHexAPI(Bot):
 
         self.api.loop()
 
-        print('KrHexAPI.opt10006(rq_name, tr_code, prev_next, scr_no) 종료')
+        print('KiwoomAPI.opt10006(rq_name, tr_code, prev_next, scr_no) 종료')
 
     # 주식분봉차트조회요청
     def opt10080(self, rq_name='opt10080', tr_code='opt10080', prev_next='0', scr_no='0101'):
-        print('KrHexAPI.opt10080(rq_name, tr_code, prev_next, scr_no) 호출')
+        print('KiwoomAPI.opt10080(rq_name, tr_code, prev_next, scr_no) 호출')
         # print('rq_name, tr_code, prev_next, scr_no : ', rq_name, tr_code, prev_next, scr_no) 
 
         ticker_list = []
@@ -184,11 +184,11 @@ class KrHexAPI(Bot):
 
             self.api.loop()
 
-        print('KrHexAPI.opt10080(rq_name, tr_code, prev_next, scr_no) 종료')
+        print('KiwoomAPI.opt10080(rq_name, tr_code, prev_next, scr_no) 종료')
 
     # 상하한가요청
     def opt10017(self, rq_name='opt10017', tr_code='opt10017', prev_next='0', scr_no='0101'):
-        print('KrHexAPI.opt10017(rq_name, tr_code, prev_next, scr_no) 호출')
+        print('KiwoomAPI.opt10017(rq_name, tr_code, prev_next, scr_no) 호출')
 
         self.api.set_input_value("시장구분", "000")
         self.api.set_input_value("상하한구분", "1")
@@ -198,11 +198,11 @@ class KrHexAPI(Bot):
 
         self.api.loop()
 
-        print('KrHexAPI.opt10017(rq_name, tr_code, prev_next, scr_no) 종료')
+        print('KiwoomAPI.opt10017(rq_name, tr_code, prev_next, scr_no) 종료')
 
     # 미체결요청
     def opt10075(self, ticker, rq_name='opt10075', tr_code='opt10075', prev_next='0', scr_no='0101'):
-        print('KrHexAPI.opt10075(rq_name, tr_code, prev_next, scr_no) 호출')
+        print('KiwoomAPI.opt10075(rq_name, tr_code, prev_next, scr_no) 호출')
 
         self.api.set_input_value("계좌번호", self.acc)
         self.api.set_input_value("전체종목구분", "0")  # 0:전체, 1:주식
@@ -214,11 +214,11 @@ class KrHexAPI(Bot):
 
         self.api.loop()
 
-        print('KrHexAPI.opt10075(rq_name, tr_code, prev_next, scr_no) 종료')
+        print('KiwoomAPI.opt10075(rq_name, tr_code, prev_next, scr_no) 종료')
 
     # hex 매도
     def kr_hex_sell(self):    
-        print('KrHexAPI.kr_hex_sell(self) 호출')
+        print('KiwoomAPI.kr_hex_sell(self) 호출')
 
         hex_date, ticker_list = self.krHexDBConnAPI.select_kr_hex_ticker_order_status_1()
 
@@ -241,10 +241,10 @@ class KrHexAPI(Bot):
                 row = {'날짜': hex_date, '종목코드': ticker}
                 self.krHexDBConnAPI.update_kr_hex_ticker_order_status_2(row)
 
-        print('KrHexAPI.kr_hex_sell(self) 종료')
+        print('KiwoomAPI.kr_hex_sell(self) 종료')
 
     def trade_sell(self, ticker, qty, price):
-        print('KrHexAPI.trade_sell(self, ticker, qty, price) 호출')
+        print('KiwoomAPI.trade_sell(self, ticker, qty, price) 호출')
 
         sell_inputs = (
             '매도주문',       # 사용자 구분명
@@ -270,11 +270,11 @@ class KrHexAPI(Bot):
             # Do something to handle error
             raise RuntimeError(f'Sending buy order went wrong.')
         
-        print('KrHexAPI.trade_sell(self, ticker, qty, price) 종료')
+        print('KiwoomAPI.trade_sell(self, ticker, qty, price) 종료')
 
     # hex 매수
     def kr_hex_buy(self):      
-        print('KrHexAPI.kr_hex_buy(self) 호출')
+        print('KiwoomAPI.kr_hex_buy(self) 호출')
 
         score = 0
         ticker_list = []
@@ -313,10 +313,10 @@ class KrHexAPI(Bot):
         # for ticker in ticker_list:
         #     self.trade_buy(ticker, qty, buy_price)  # 매수   
 
-        print('KrHexAPI.kr_hex_buy(self) 종료')
+        print('KiwoomAPI.kr_hex_buy(self) 종료')
 
     def trade_buy(self, ticker, qty, price):
-        print('KrHexAPI.trade_buy(self, ticker, qty, price) 호출')
+        print('KiwoomAPI.trade_buy(self, ticker, qty, price) 호출')
 
         stoploss_percent = 0.07  # 스톱로스 가격 계산을 위한 감소 비율 (7%를 나타내는 경우)
         stoploss_price = price - (price * stoploss_percent)  # 스톱로스 가격 계산
@@ -367,7 +367,7 @@ class KrHexAPI(Bot):
         
         self.krHexDBConnAPI.update_kr_hex_ticker_order_status_1()
 
-        print('KrHexAPI.trade_buy(self, ticker, qty, price) 종료')             
+        print('KiwoomAPI.trade_buy(self, ticker, qty, price) 종료')             
 
 
 # ===================================================================================== #
